@@ -1,6 +1,25 @@
 version: '3.7'
 
 services:
+  app:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        BUILD_APP: app
+    command: >
+      sh -c 'npm i && npm run build && npm run start'
+    ports:
+      - '${APP_OUT_PORT}:${APP_PORT}'
+    volumes:
+      - .:/app/
+      - /app/node_modules/
+      - /app/dist/
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:14.0-alpine3.14
     env_file:
