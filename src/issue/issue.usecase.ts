@@ -1,11 +1,19 @@
 import { BaseUsecase } from '../common';
 import Issue from './issue.model';
-import { IssueRepository, Repository } from './issue.repository';
+import { IssueRepository } from './issue.repository';
 
-class Usecase extends BaseUsecase<Issue, Repository> {
+export class IssueUsecase extends BaseUsecase<Issue, IssueRepository> {
   constructor(protected readonly repository) {
     super(repository);
   }
-}
 
-export const IssueUsecase = new Usecase(IssueRepository);
+  async resolve(id: string): Promise<Issue> {
+    const issue = await this.repository.resolve(id);
+
+    return issue;
+  }
+
+  static instance(): IssueUsecase {
+    return super.instance(IssueUsecase, IssueRepository.instance());
+  }
+}

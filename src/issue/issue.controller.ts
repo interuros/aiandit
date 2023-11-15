@@ -1,8 +1,42 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { IssueUsecase } from './issue.usecase';
+import { Request } from 'express';
+import { PostIssueDto } from './dto/post-issue.dto';
+import { issueEvent } from './event/issue.event';
 
-const create: RequestHandler = (req, res, next): void => {
-  IssueUsecase.create(req.body).then((issue) => res.json(issue));
-};
+export class IssueController {
+  private static _instance: IssueController;
 
-export { create };
+  constructor(private readonly service: IssueUsecase) {}
+
+  create: RequestHandler = (
+    req: Request<any, any, PostIssueDto>,
+    res,
+    next,
+  ): void => {
+    this.service.create(req.body).then((issue) => {
+      issueEvent.emit('created', issue);
+      return res.json(issue);
+    });
+  };
+
+  resolve: RequestHandler = (
+    req: Request<{ issueId: string }>,
+    res,
+    next,
+  ): void => {
+    this.service.resolve(req.params.issueId).then((issue) => {
+      issueEvent.emit('resolved', issue);
+      return res.json(issue);
+    });
+  };
+
+  static instance(): IssueController {
+    if (this._instance) {
+      return this._instance;
+    }
+
+    this._instance = new IssueController(IssueUsecase.instance());
+    return this._instance;
+  }
+}

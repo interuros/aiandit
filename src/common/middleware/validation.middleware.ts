@@ -1,13 +1,22 @@
 import { validate } from 'class-validator';
 import { ValidationError } from 'class-validator/types/validation/ValidationError';
+import { RequestHandler } from 'express-serve-static-core';
 
-export const validationMiddleware = <T extends object>(type: { new (): T }) => {
+export const validationMiddleware = <T extends object>(type: {
+  new (): T;
+}): RequestHandler => {
   return (req, res, next) => {
-    validatePayload<T>(req.body, type).then((errors) => {
+    let payload = req.body;
+
+    if (req.method === 'GET') {
+      payload = req.query;
+    }
+
+    validatePayload<T>(payload, type).then((errors) => {
       if (errors.length === 0) {
         next();
       } else {
-        console.log('Promise rejected (validation failed). Errors: ', errors);
+        res.status(400).send(errors);
       }
     });
   };

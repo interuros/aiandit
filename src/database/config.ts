@@ -8,6 +8,10 @@ const sequelizeConnection = new Sequelize({
   username: configService.get('DB_USER'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
+  sync: {
+    searchPath: '../**/*.mode.ts',
+    alter: true,
+  },
 });
 
 export default sequelizeConnection;
