@@ -3,7 +3,7 @@ import Issue from './issue.model';
 import { IssueRepository } from './issue.repository';
 
 export class IssueUsecase extends BaseUsecase<Issue, IssueRepository> {
-  constructor(protected readonly repository) {
+  constructor(protected readonly repository: IssueRepository) {
     super(repository);
   }
 

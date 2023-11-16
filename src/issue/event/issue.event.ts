@@ -7,12 +7,14 @@ class IssueEventEmitter extends EventEmitter {
     super();
   }
 
-  assignIssue(issue: Issue): Promise<Issue> {
-    return this.supportAgentService.assignIssue(issue);
+  assignIssue(issue: Issue): void {
+    this.supportAgentService.assignIssue(issue).then();
   }
+
+  assignSupportAgent(issue: Issue): void {}
 }
 
 export const issueEvent = new IssueEventEmitter(SupportAgentUsecase.instance());
 
 issueEvent.on('created', issueEvent.assignIssue);
-issueEvent.on('resolved', issueEvent.assignIssue);
+issueEvent.on('resolved', issueEvent.assignSupportAgent);

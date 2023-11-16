@@ -10,7 +10,6 @@ export class BaseUsecase<M extends Model<M>, R extends IRepository<M>>
   constructor(protected readonly repository: R) {}
 
   create(payload: Partial<Omit<M, keyof M>>): Promise<Model<M>> {
-    console.log(Object.keys(this.repository));
     return this.repository.create(payload);
   }
 

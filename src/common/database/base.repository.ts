@@ -1,5 +1,5 @@
 import { IRepository } from './i.repository';
-import { Model, ModelCtor } from 'sequelize';
+import { FindOptions, Model, ModelCtor } from 'sequelize';
 import { CreationAttributes } from 'sequelize/types/model';
 
 export abstract class BaseRepository<M extends Model<M>>
@@ -8,6 +8,15 @@ export abstract class BaseRepository<M extends Model<M>>
   protected static _instance;
 
   constructor(private readonly model: ModelCtor<M>) {}
+
+  static instance(type, model) {
+    if (this._instance) {
+      return this._instance;
+    }
+
+    this._instance = new type(model);
+    return this._instance;
+  }
 
   async create(payload: CreationAttributes<M>): Promise<M> {
     return this.model.create(payload);
@@ -39,12 +48,7 @@ export abstract class BaseRepository<M extends Model<M>>
     return this.getById(id);
   }
 
-  static instance(type, model) {
-    if (this._instance) {
-      return this._instance;
-    }
-
-    this._instance = new type(model);
-    return this._instance;
+  findAll(options?: FindOptions<M>): Promise<M[]> {
+    return this.model.findAll(options);
   }
 }

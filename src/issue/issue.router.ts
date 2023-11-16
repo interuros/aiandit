@@ -5,7 +5,6 @@ import { PostIssueDto } from './dto/post-issue.dto';
 
 export const issueRouter = Router();
 
-issueRouter.get('/');
 issueRouter.post(
   '/',
   validationMiddleware<PostIssueDto>(PostIssueDto),
