@@ -51,4 +51,8 @@ export abstract class BaseRepository<M extends Model<M>>
   findAll(options?: FindOptions<M>): Promise<M[]> {
     return this.model.findAll(options);
   }
+
+  findOne(options?: FindOptions<M>): Promise<M> {
+    return this.model.findOne(options);
+  }
 }

@@ -12,7 +12,6 @@ export class IssueController {
   create: RequestHandler = (
     req: Request<any, any, PostIssueDto>,
     res,
-    next,
   ): void => {
     this.service.create(req.body).then((issue) => {
       issueEvent.emit('created', issue);
@@ -20,11 +19,7 @@ export class IssueController {
     });
   };
 
-  resolve: RequestHandler = (
-    req: Request<{ issueId: string }>,
-    res,
-    next,
-  ): void => {
+  resolve: RequestHandler = (req: Request<{ issueId: string }>, res): void => {
     this.service.resolve(req.params.issueId).then((issue) => {
       issueEvent.emit('resolved', issue);
       return res.json(issue);

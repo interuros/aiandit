@@ -17,4 +17,16 @@ export class SupportAgentIssueRepository extends BaseRepository<SupportAgentIssu
       supportAgentId: agent.id,
     });
   }
+
+  findByIssueAndAgent(
+    issue: Issue,
+    agent: SupportAgent,
+  ): Promise<SupportAgentIssue> {
+    return this.findOne({
+      where: {
+        issueId: issue.id,
+        supportAgentId: agent.id,
+      },
+    });
+  }
 }

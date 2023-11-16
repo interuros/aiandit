@@ -19,6 +19,32 @@ export class SupportAgentIssueUsecase extends BaseUsecase<
     );
   }
 
+  async markAsInactiveByIssueAndAgent(
+    issue: Issue,
+    agent: SupportAgent,
+  ): Promise<SupportAgentIssue> {
+    const assignment = await this.findByIssueAndAgent(issue, agent);
+
+    if (assignment) {
+      return this.markAsInactive(assignment);
+    }
+
+    return null;
+  }
+
+  findByIssueAndAgent(
+    issue: Issue,
+    agent: SupportAgent,
+  ): Promise<SupportAgentIssue> {
+    return this.repository.findByIssueAndAgent(issue, agent);
+  }
+
+  markAsInactive(assignment: SupportAgentIssue): Promise<SupportAgentIssue> {
+    return this.update(assignment.id, {
+      active: false,
+    });
+  }
+
   assignIssueToAgent(
     issue: Issue,
     agent: SupportAgent,

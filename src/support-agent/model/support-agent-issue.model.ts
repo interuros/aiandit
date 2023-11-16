@@ -2,6 +2,8 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 class SupportAgentIssue extends Model {
   id: string;
+  issueId: string;
+  supportAgentId: string;
 
   static initialize(db: Sequelize) {
     return super.init(

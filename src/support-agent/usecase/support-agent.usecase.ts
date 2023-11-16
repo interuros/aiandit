@@ -4,6 +4,7 @@ import { SupportAgentRepository } from '../repository';
 import Issue from '../../issue';
 import { SupportAgentIssueUsecase } from './support-agent-issue.usecase';
 import SupportAgentIssue from '../model/support-agent-issue.model';
+import { IssueUsecase } from '../../issue/issue.usecase';
 
 export class SupportAgentUsecase extends BaseUsecase<
   SupportAgent,
@@ -12,6 +13,7 @@ export class SupportAgentUsecase extends BaseUsecase<
   constructor(
     protected readonly repository: SupportAgentRepository,
     private readonly supportAgentIssueService: SupportAgentIssueUsecase,
+    private readonly issueService: IssueUsecase,
   ) {
     super(repository);
   }
@@ -21,11 +23,12 @@ export class SupportAgentUsecase extends BaseUsecase<
       SupportAgentUsecase,
       SupportAgentRepository.instance(),
       SupportAgentIssueUsecase.instance(),
+      IssueUsecase.instance(),
     );
   }
 
   async assignIssue(issue: Issue): Promise<SupportAgentIssue> {
-    const randomAgent = await this.getRandomFreeAgent();
+    const randomAgent: SupportAgent = await this.getRandomFreeAgent();
 
     if (randomAgent) {
       return this.supportAgentIssueService.assignIssueToAgent(
@@ -35,6 +38,22 @@ export class SupportAgentUsecase extends BaseUsecase<
     }
 
     return null;
+  }
+
+  async assignRandomOpenIssueToAgent(
+    agent: SupportAgent,
+  ): Promise<SupportAgentIssue> {
+    const issue: Issue = await this.issueService.getRandomOpenIssue();
+
+    if (issue) {
+      return this.supportAgentIssueService.assignIssueToAgent(issue, agent);
+    }
+
+    return null;
+  }
+
+  getIssueAgent(issue: Issue): Promise<SupportAgent> {
+    return this.repository.getIssueAgent(issue);
   }
 
   getRandomFreeAgent(): Promise<SupportAgent> {

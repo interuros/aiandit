@@ -1,11 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 import { IssueStatusEnum } from './enum';
 import { ModelsType } from '../common';
+import SupportAgent from '../support-agent/model/support-agent.model';
 
 class Issue extends Model {
   id: string;
   body: string;
   status: IssueStatusEnum;
+  agents: SupportAgent[];
 
   static initialize(db: Sequelize) {
     return super.init(
@@ -40,6 +42,7 @@ class Issue extends Model {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
       foreignKey: 'issueId',
+      as: 'agents',
     });
   }
 }

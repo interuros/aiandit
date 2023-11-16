@@ -6,4 +6,5 @@ export interface IRepository<M extends Model<M>> {
   create(payload: Partial<Omit<M, keyof M>>): Promise<M>;
   update(id: string, payload: Partial<Omit<M, keyof M>>): Promise<M | null>;
   findAll(options?: FindOptions<M>): Promise<M[]>;
+  findOne(options?: FindOptions<M>): Promise<M>;
 }

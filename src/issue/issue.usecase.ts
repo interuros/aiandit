@@ -13,6 +13,10 @@ export class IssueUsecase extends BaseUsecase<Issue, IssueRepository> {
     return issue;
   }
 
+  getRandomOpenIssue(): Promise<Issue> {
+    return this.repository.getRandomOpenIssue();
+  }
+
   static instance(): IssueUsecase {
     return super.instance(IssueUsecase, IssueRepository.instance());
   }

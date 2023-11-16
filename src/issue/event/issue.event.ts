@@ -1,9 +1,15 @@
 import { EventEmitter } from 'events';
-import { SupportAgentUsecase } from '../../support-agent/usecase';
+import {
+  SupportAgentIssueUsecase,
+  SupportAgentUsecase,
+} from '../../support-agent/usecase';
 import Issue from '../issue.model';
 
 class IssueEventEmitter extends EventEmitter {
-  constructor(private readonly supportAgentService: SupportAgentUsecase) {
+  constructor(
+    private readonly supportAgentService: SupportAgentUsecase,
+    private readonly assignmentService: SupportAgentIssueUsecase,
+  ) {
     super();
   }
 
@@ -11,10 +17,18 @@ class IssueEventEmitter extends EventEmitter {
     this.supportAgentService.assignIssue(issue).then();
   }
 
-  assignSupportAgent(issue: Issue): void {}
+  async assignSupportAgent(issue: Issue): Promise<void> {
+    const agent = await this.supportAgentService.getIssueAgent(issue);
+
+    await this.assignmentService.markAsInactiveByIssueAndAgent(issue, agent);
+    await this.supportAgentService.assignRandomOpenIssueToAgent(agent);
+  }
 }
 
-export const issueEvent = new IssueEventEmitter(SupportAgentUsecase.instance());
+export const issueEvent = new IssueEventEmitter(
+  SupportAgentUsecase.instance(),
+  SupportAgentIssueUsecase.instance(),
+);
 
 issueEvent.on('created', issueEvent.assignIssue);
 issueEvent.on('resolved', issueEvent.assignSupportAgent);
