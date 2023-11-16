@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "4dc6b4d6-61c3-45b9-a98c-37aebf1f4f5f",
+		"name": "AI&IT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26917709",
+		"_collection_link": "https://vukovi-s-vucijaka.postman.co/workspace/My-Workspace~81367071-8f7a-462b-8004-23cd16d993f4/collection/26917709-4dc6b4d6-61c3-45b9-a98c-37aebf1f4f5f?action=share&source=collection_link&creator=26917709"
+	},
+	"item": [
+		{
+			"name": "issues",
+			"item": [
+				{
+					"name": "create issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"if (data?.id)\r",
+									"    postman.setEnvironmentVariable('issue_id', data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/issues",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resolve issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"if (data?.id)\r",
+									"    postman.setEnvironmentVariable('issue_id', data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"body\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/issues/{{issue_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"issues",
+								"{{issue_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

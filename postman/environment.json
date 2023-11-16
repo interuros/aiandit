@@ -1,0 +1,21 @@
+{
+	"id": "ea6c800d-1e87-4669-af46-392775c1fa7e",
+	"name": "AI&IT",
+	"values": [
+		{
+			"key": "issue_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "url",
+			"value": "localhost:5000/api",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-11-16T23:16:09.847Z",
+	"_postman_exported_using": "Postman/10.20.0"
+}
